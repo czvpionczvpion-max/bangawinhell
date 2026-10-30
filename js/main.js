@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  let currentLang = localStorage.getItem('coldbet-lang') || 'pl';
+  let currentLang = localStorage.getItem('bangawin-lang') || 'pl';
 
   function setLanguage(lang) {
     currentLang = lang;
-    localStorage.setItem('coldbet-lang', lang);
+    localStorage.setItem('bangawin-lang', lang);
     document.documentElement.lang = lang;
 
     document.querySelectorAll('.lang-toggle button').forEach((btn) => {

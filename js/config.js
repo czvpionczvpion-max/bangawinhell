@@ -3,7 +3,7 @@ const CONFIG = {
   brand: 'HELLBOY',
 
   partner: {
-    name: 'COLDBET',
+    name: 'BANGAWIN',
     siteUrl:
       'https://record.go2affiliates.com/_oJ0NC7bLyyKSrvuE0LzvjmNd7ZgqdRLk/1/',
     logoPath: 'assets/header-logo-desktop.webp',
