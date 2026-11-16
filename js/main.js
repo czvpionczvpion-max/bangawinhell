@@ -80,6 +80,68 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  const toast = document.querySelector('.toast');
+  let toastTimer;
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text).catch(() => legacyCopy(text));
+    }
+    return legacyCopy(text);
+  }
+
+  function legacyCopy(text) {
+    return new Promise((resolve, reject) => {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      const ok = document.execCommand('copy');
+      area.remove();
+      ok ? resolve() : reject();
+    });
+  }
+
+  document.querySelectorAll('[data-copy]').forEach((el) => {
+    el.addEventListener('click', () => {
+      copyText(el.dataset.copy).then(() => {
+        document.querySelectorAll('[data-copy]').forEach((other) => other.classList.remove('is-copied'));
+        el.classList.add('is-copied');
+
+        const label = el.querySelector('.copy-text');
+        if (label) label.textContent = translations[currentLang]?.copied || 'OK';
+
+        if (toast) toast.classList.add('is-visible');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          el.classList.remove('is-copied');
+          if (label) label.textContent = translations[currentLang]?.copyBtn || '';
+          if (toast) toast.classList.remove('is-visible');
+        }, 2200);
+      });
+    });
+  });
+
+  const heroFrame = document.querySelector('.hero-frame');
+  const canTilt =
+    window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 901px)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (heroFrame && canTilt) {
+    heroFrame.addEventListener('pointermove', (e) => {
+      const rect = heroFrame.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      heroFrame.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 8}deg) scale(1.02)`;
+    });
+    heroFrame.addEventListener('pointerleave', () => {
+      heroFrame.style.transform = '';
+    });
+  }
+
   const yearSpan = document.querySelector('.footer-legal p:last-child');
   if (yearSpan) {
     yearSpan.innerHTML = yearSpan.innerHTML.replace('2026', String(new Date().getFullYear()));
