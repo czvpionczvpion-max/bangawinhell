@@ -125,23 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  const heroFrame = document.querySelector('.hero-frame');
-  const canTilt =
-    window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 901px)').matches &&
-    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (heroFrame && canTilt) {
-    heroFrame.addEventListener('pointermove', (e) => {
-      const rect = heroFrame.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
-      heroFrame.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 8}deg) scale(1.02)`;
-    });
-    heroFrame.addEventListener('pointerleave', () => {
-      heroFrame.style.transform = '';
-    });
-  }
-
   const yearSpan = document.querySelector('.footer-legal p:last-child');
   if (yearSpan) {
     yearSpan.innerHTML = yearSpan.innerHTML.replace('2026', String(new Date().getFullYear()));
